@@ -1,0 +1,1 @@
+NUTS3_REGION_INFO = "./data/regioninfo/nuts3regioninfo.csv"
