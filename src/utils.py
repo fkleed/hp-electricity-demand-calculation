@@ -27,9 +27,10 @@ class RegionInfoReader:
         return combined_region_infos
 
 
-class BuildingInfoReader:
-    def __call__(self, file_path) -> dict[str, list[BuildingInfo]]:
-        combined_building_info: dict[str, list[BuildingInfo]] = dict()
+class BuildingStructureReader:
+    def __call__(self, file_path) -> dict[str, dict[str, BuildingInfo]]:
+        combined_building_structure: dict[str,
+                                          dict[str, BuildingInfo]] = dict()
 
         with open(file_path) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
@@ -49,14 +50,16 @@ class BuildingInfoReader:
                         hp_amount_probe=float(row[9]),
                         hp_amount_collector=float(row[10])
                     )
-                    if combined_building_info.get(nuts3_code, -1) == -1:
-                        combined_building_info[nuts3_code] = list()
-                        combined_building_info[nuts3_code].append(buildin_info)
+                    if combined_building_structure.get(nuts3_code, -1) == -1:
+                        combined_building_structure[nuts3_code] = dict()
+                        combined_building_structure[nuts3_code][buildin_info.building_type_size + ' ' +
+                                                                buildin_info.year_of_construction] = buildin_info
                     else:
-                        combined_building_info[nuts3_code].append(buildin_info)
+                        combined_building_structure[nuts3_code][buildin_info.building_type_size + ' ' +
+                                                                buildin_info.year_of_construction] = buildin_info
                 line_count += 1
 
-        return combined_building_info
+        return combined_building_structure
 
 
 class CsvReader:

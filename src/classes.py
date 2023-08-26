@@ -38,9 +38,9 @@ class HourlyElectricityDemand:
 @dataclass
 class Region:
     region_info: RegionInfo
-    building_structure: list[BuildingInfo] = field(default_factory=list)
-    electricity_demand: list[HourlyElectricityDemand] = field(
-        default_factory=list)
+    building_structure: dict[str, BuildingInfo] = field(default_factory=dict)
+    electricity_demand: dict[str, HourlyElectricityDemand] = field(
+        default_factory=dict)
 
 
 @dataclass

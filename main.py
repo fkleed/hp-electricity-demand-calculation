@@ -1,6 +1,6 @@
 from src.classes import *
 from src.utils import *
-from src.constants import REGION_INFO_PATH, BUILDING_INFO_PATH, ElectricityDemand
+from src.constants import REGION_INFO_PATH, BUILDING_STRUCTURE_PATH, ElectricityDemand
 
 
 def get_region_info(
@@ -19,11 +19,11 @@ def get_region_info(
 def get_building_structure(
         regions_electricity_demand: RegionsElectricityDemand
 ) -> RegionsElectricityDemand:
-    csv_reader = CsvReader(BuildingInfoReader())
-    combined_building_info = csv_reader.read(BUILDING_INFO_PATH)
+    csv_reader = CsvReader(BuildingStructureReader())
+    combined_building_structure = csv_reader.read(BUILDING_STRUCTURE_PATH)
 
     for region in regions_electricity_demand.regions:
-        regions_electricity_demand.regions[region].building_structure = combined_building_info[region]
+        regions_electricity_demand.regions[region].building_structure = combined_building_structure[region]
 
     return regions_electricity_demand
 
@@ -41,7 +41,8 @@ def calculate_regions_electricity_demand(
         electricity_demand: ElectricityDemand
 ) -> RegionsElectricityDemand:
     get_region_info(regions_electricity_demand=regions_electricity_demand)
-    get_building_structure(regions_electricity_demand=regions_electricity_demand)
+    get_building_structure(
+        regions_electricity_demand=regions_electricity_demand)
     get_hourly_electricity_demand(
         regions_electricity_demand=regions_electricity_demand, electricity_demand=electricity_demand)
 
