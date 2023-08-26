@@ -45,4 +45,4 @@ class Region:
 
 @dataclass
 class RegionsElectricityDemand:
-    regions: list[Region] = field(default_factory=list)
+    regions: dict[str, Region] = field(default_factory=dict)
