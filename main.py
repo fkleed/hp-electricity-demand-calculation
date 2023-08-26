@@ -1,6 +1,6 @@
 from src.classes import *
 from src.utils import *
-from src.constants import REGION_INFO_PATH, BUILDING_STRUCTURE_PATH, ElectricityDemand
+from src.constants import REGION_INFO_PATH, BUILDING_STRUCTURE_PATH, ElectricityDemandPath
 
 
 def get_region_info(
@@ -30,21 +30,23 @@ def get_building_structure(
 
 def get_hourly_electricity_demand(
         regions_electricity_demand: RegionsElectricityDemand,
-        electricity_demand: ElectricityDemand
+        electricity_demand_path: ElectricityDemandPath
 ) -> RegionsElectricityDemand:
+    csv_reader = CsvReader(ElectricityDemandReader())
+    electricity_demand = csv_reader.read(electricity_demand_path.value)
 
     return regions_electricity_demand
 
 
 def calculate_regions_electricity_demand(
         regions_electricity_demand: RegionsElectricityDemand,
-        electricity_demand: ElectricityDemand
+        electricity_demand_path: ElectricityDemandPath
 ) -> RegionsElectricityDemand:
     get_region_info(regions_electricity_demand=regions_electricity_demand)
     get_building_structure(
         regions_electricity_demand=regions_electricity_demand)
     get_hourly_electricity_demand(
-        regions_electricity_demand=regions_electricity_demand, electricity_demand=electricity_demand)
+        regions_electricity_demand=regions_electricity_demand, electricity_demand_path=electricity_demand_path)
 
     return regions_electricity_demand
 
@@ -54,7 +56,7 @@ def main():
 
     calculate_regions_electricity_demand(
         regions_electricity_demand=regions_electricity_demand,
-        electricity_demand=ElectricityDemand.REFERENCE_YEAR
+        electricity_demand_path=ElectricityDemandPath.REFERENCE_YEAR
     )
 
     print(len(regions_electricity_demand.regions))

@@ -4,7 +4,7 @@ REGION_INFO_PATH = "./data/regioninfo/nuts3regioninfo.csv"
 BUILDING_STRUCTURE_PATH = "./data/hpdistribution/building_stock_2030_with_hp_distribution.csv"
 
 
-class ElectricityDemand(Enum):
+class ElectricityDemandPath(Enum):
     REFERENCE_YEAR = "./data/electricitydemand/loadprofile_reference.csv"
     COLD_YEAR = "./data/electricitydemand/loadprofile_cold.csv"
     HOT_YEAR = "./data/electricitydemand/loadprofile_hot.csv"
