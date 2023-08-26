@@ -30,8 +30,8 @@ class BuildingInfo:
 class HourlyElectricityDemand:
     time: str
     temperature_kelvin: float
-    temperature_soil_collector: float
-    temperature_soil_probe: float
+    soil_temperature_kelvin_collector: float
+    soil_temperature_kelvin_probe: float
     hourly_electricity_demand: float
 
 
