@@ -1,4 +1,6 @@
 import csv
+import json
+import dataclasses
 from src.classes import RegionInfo, BuildingInfo, ElectricityDemand
 
 
@@ -310,8 +312,28 @@ class ElectricityDemandReader:
 
 
 class CsvReader:
-    def __init__(self, reader_type) -> None:
+    def __init__(self, reader_type):
         self.reader_type = reader_type
 
     def read(self, file_path):
         return self.reader_type(file_path)
+
+
+class EnhancedJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if dataclasses.is_dataclass(o):
+            return dataclasses.asdict(o)
+        return super().default(o)
+
+
+class JsonSerializer:
+    def __call__(self, data):
+        return json.dumps(data, cls=EnhancedJSONEncoder)
+
+
+class DataSerializer:
+    def __init__(self, serializing_strategy):
+        self.serializing_strategy = serializing_strategy
+
+    def serialize(self, data):
+        return self.serializing_strategy(data)
