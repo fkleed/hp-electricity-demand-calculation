@@ -19,7 +19,7 @@ def get_hourly_electricity_demand(
 
     regions = list(combined_building_structure.keys())
 
-    for region in regions[:3]:
+    for region in regions:
         electricity_demand: dict[str, HourlyElectricityDemand] = dict()
         building_structure = combined_building_structure[region]
 

@@ -6,7 +6,8 @@ from src.utils import CsvWriter, RegionsElectricityDemandWriter
 
 def write_electricity_demand_to_csv(regions_electricity_demand: RegionsElectricityDemand, regions_electricity_demand_output_path: RegionsElectricityDemandOutputPath):
     writer = CsvWriter(RegionsElectricityDemandWriter())
-    writer.write(regions_electricity_demand, regions_electricity_demand_output_path.value)
+    writer.write(regions_electricity_demand,
+                 regions_electricity_demand_output_path.value)
 
 
 def main():
