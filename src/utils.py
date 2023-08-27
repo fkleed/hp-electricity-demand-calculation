@@ -1,39 +1,11 @@
 import csv
-import json
-import dataclasses
-from src.classes import RegionInfo, BuildingInfo, ElectricityDemand
-
-
-class RegionInfoReader:
-    def __call__(self, file_path) -> list[RegionInfo]:
-        combined_region_infos: list[RegionInfo] = []
-
-        with open(file_path) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=';')
-            line_count = 0
-            for row in csv_reader:
-                if line_count != 0:
-                    combined_region_infos.append(
-                        RegionInfo(
-                            nuts1_code=row[0],
-                            nuts1_name=row[1],
-                            nuts2_code=row[2],
-                            nuts2_name=row[3],
-                            nuts3_code=row[4],
-                            nuts3_name=row[5],
-                            nuts3_type=row[6]
-                        )
-                    )
-                line_count += 1
-
-        return combined_region_infos
+from src.classes import *
 
 
 class BuildingStructureReader:
     def __call__(self, file_path) -> dict[str, dict[str, BuildingInfo]]:
         combined_building_structure: dict[str,
                                           dict[str, BuildingInfo]] = dict()
-
         with open(file_path) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             line_count = 0
@@ -44,10 +16,6 @@ class BuildingStructureReader:
                         building_type_size=row[1],
                         year_of_construction=row[2],
                         building_count=int(row[3]),
-                        hp_potential_total=float(row[4]),
-                        hp_potential_air=float(row[5]),
-                        hp_potential_probe=float(row[6]),
-                        hp_potential_collector=float(row[7]),
                         hp_amount_air=float(row[8]),
                         hp_amount_probe=float(row[9]),
                         hp_amount_collector=float(row[10])
@@ -319,21 +287,28 @@ class CsvReader:
         return self.reader_type(file_path)
 
 
-class EnhancedJSONEncoder(json.JSONEncoder):
-    def default(self, o):
-        if dataclasses.is_dataclass(o):
-            return dataclasses.asdict(o)
-        return super().default(o)
+class RegionsElectricityDemandWriter:
+    def __call__(self, regions_electricity_demand: RegionsElectricityDemand, file_path: str):
+        csv_columns = ['nuts3_code', 'time', 'hourly_electricity_demand']
+
+        regions = list(regions_electricity_demand.regions.keys())
+        hours = list(regions_electricity_demand.regions[regions[1]].keys())
+
+        with open(file_path, 'w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerow(csv_columns)
+
+            for region in regions:
+                for hour in hours:
+                    hourly_electricity_demand = regions_electricity_demand.regions[region][hour]
+                    row = [hourly_electricity_demand.nuts3_code, hourly_electricity_demand.time,
+                           hourly_electricity_demand.hourly_electricity_demand]
+                    csv_writer.writerow(row)
 
 
-class JsonSerializer:
-    def __call__(self, data):
-        return json.dumps(data, cls=EnhancedJSONEncoder)
+class CsvWriter:
+    def __init__(self, writer_type):
+        self.writer_type = writer_type
 
-
-class DataSerializer:
-    def __init__(self, serializing_strategy):
-        self.serializing_strategy = serializing_strategy
-
-    def serialize(self, data):
-        return self.serializing_strategy(data)
+    def write(self, data, file_path):
+        return self.writer_type(data, file_path)
