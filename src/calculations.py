@@ -9,7 +9,7 @@ def get_building_structure() -> dict[str, dict[str, BuildingInfo]]:
 
 
 def get_hourly_electricity_demand(
-        regions_electricity_demand: dict[str, HourlyElectricityDemand],
+        regions_electricity_demand: RegionsElectricityDemand,
         electricity_demand_path: ElectricityDemandPath,
         combined_building_structure: dict[str, dict[str, BuildingInfo]]
 ) -> dict[str, HourlyElectricityDemand]:
