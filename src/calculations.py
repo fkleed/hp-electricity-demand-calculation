@@ -12,7 +12,7 @@ def get_hourly_electricity_demand(
         regions_electricity_demand: RegionsElectricityDemand,
         electricity_demand_path: ElectricityDemandPath,
         combined_building_structure: dict[str, dict[str, BuildingInfo]]
-) -> dict[str, HourlyElectricityDemand]:
+) -> dict[str, dict[str, HourlyElectricityDemand]]:
     csv_reader = CsvReader(ElectricityDemandReader())
     electricity_demand_building_types = csv_reader.read(
         electricity_demand_path.value)
